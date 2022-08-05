@@ -35,22 +35,53 @@ def contact(request):
 # Create a `login_request` view to handle sign in request
 # def login_request(request):
 # ...
-
+def contact(request):
+    context = {}
+    if request.method == "GET":
+        return render(request, 'djangoapp/contact.html', context)
 # Create a `logout_request` view to handle sign out request
 # def logout_request(request):
 # ...
-
+def login_request(request):
+    context = {}
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['psw']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('djangoapp:index')
+        else:
+            messages.warning(request, "Invalid username or password.")
+            return redirect("djangoapp:index")
 # Create a `registration_request` view to handle sign up request
 # def registration_request(request):
 # ...
 
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
-    context = {}
     if request.method == "GET":
+        context = {}
+        url = "#"
+        ##dealerships = get_dealers_from_cf(url)
+        #context["dealership_list"] = dealerships
         return render(request, 'djangoapp/index.html', context)
 
+def get_dealer_details(request, id):
+    if request.method == "GET":
+        context = {}
+        dealer_url = "#"
+        #dealer = get_dealer_by_id_from_cf(dealer_url, id=id)
+        #context["dealer"] = dealer
+    
+        review_url = "#"
+        ##reviews = get_dealer_reviews_from_cf(review_url, id=id)
+        ##print(reviews)
+        context["reviews"] = reviews
+        
+        return render(request, '#', context)
 
+##djangoapp/dealer_details.html
 # Create a `get_dealer_details` view to render the reviews of a dealer
 # def get_dealer_details(request, dealer_id):
 # ...
