@@ -27,7 +27,7 @@ DEBUG = True
 
 APPEND_SLASH = True
 
-ALLOWED_HOSTS = ["localhost"]
+ALLOWED_HOSTS = ["localhost","mfbjcardjango.us-east.cf.appdomain.cloud","mfbjcardjango.us-east.mybluemix.net"]
 
 
 # Application definition
