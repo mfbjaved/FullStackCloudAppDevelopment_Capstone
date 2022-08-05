@@ -6,6 +6,48 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
     <body>
-    <!--Add a registration form here -->
+        <nav class="navbar navbar-expand-md sticky-top navbar-dark bg-dark">
+            <div class="container-fluid">
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'djangoapp:index' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'djangoapp:about' %}">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'djangoapp:contact' %}">Contact Us</a>
+                </li>
+                
+            </ul>
+            </div>
+        </nav>
+        <div class="rightalign">
+            <div class="dropdown">
+        <form action="{% url 'djangoapp:registration' %}" method="post">
+            <div class="container"> 
+              {% csrf_token %}
+              <h1>Sign Up</h1>
+              <hr>
+              <div class="form-group"> 
+                  <label for="username"><b>User Name</b></label>
+                  <input type="text" class="form-control" placeholder="Enter User Name: " name="username" required> <!--Style input with .form-control class -->
+                  <label for="firstname"><b>First Name</b></label>
+                  <input type="text" class="form-control" placeholder="Enter First Name: " name="firstname" required> <!--Style input with .form-control class -->
+                  <label for="lastname"><b>Last Name</b></label>
+                  <input type="text" class="form-control" placeholder="Enter Last Name: " name="lastname" required> <!--Style input with .form-control class -->
+                  <label for="psw"><b>Password</b></label>
+                  <input type="password" class="form-control" placeholder="Enter Password: " name="psw" required> <!--Style input with .form-control class -->
+                  {% if message %}
+                  <div class="alert alert-warning">
+                      {{ message }}
+                  </div>
+                  {% endif %}
+                  <button class="btn btn-primary" type="submit">Sign up</button> 
+              </div>
+            </div>
+          </form>
+             </div>
+        </div>
     </body>
 </html>
