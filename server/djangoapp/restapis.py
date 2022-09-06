@@ -2,7 +2,7 @@ import requests
 import json
 
 from requests.auth import HTTPBasicAuth
-from .models import CarDealer
+from .models import CarDealer, DealerReview
 from requests.auth import HTTPBasicAuth
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibm_watson import NaturalLanguageUnderstandingV1
@@ -61,7 +61,21 @@ def get_dealers_from_cf(url, **kwargs):
     return results
 
 # Create a get_dealer_reviews_from_cf method to get reviews by dealer id from a cloud function
-# def get_dealer_by_id_from_cf(url, dealerId):
+def get_dealer_reviews_from_cf(url, id):
+    results = []
+    # Call get_request with a URL parameter
+    json_result = get_request(url, id=id)
+    if json_result:
+        # Get the row list in JSON as dealers
+        dealers = json_result['data']
+        # For each dealer object
+        dealer_doc = dealers['docs']
+        for i in range(len(dealer_doc)):
+            dealer_obj = DealerReview(dealership=dealer_doc[i]["dealership"], name=dealer_doc[i]["name"], purchase=dealer_doc[i]["purchase"],
+                                   review=dealer_doc[i]["review"])
+            results.append(dealer_obj)
+
+    return results
 # - Call get_request() with specified arguments
 # - Parse JSON results into a DealerView object list
 
