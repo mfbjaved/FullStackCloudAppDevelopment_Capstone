@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 # from .models import related models
 from .models import CarModel, CarMake, CarDealer, DealerReview
-from .restapis import get_dealers_from_cf, get_dealer_reviews_from_cf
+from .restapis import get_dealers_from_cf, get_dealer_reviews_from_cf, post_request
 # from .restapis import related methods
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
@@ -108,6 +108,28 @@ def get_dealer_details(request, id):
         return HttpResponse(dealer)
 
 # Create a `add_review` view to submit a review
-# def add_review(request, dealer_id):
-# ...
+def add_review(request, id):
+        if request.user.is_authenticated:
+            username = request.user.username
+            print(request.POST)
+            payload = dict()
+            payload["time"] = datetime.utcnow().isoformat()
+            payload["name"] = username
+            payload["dealership"] = id
+            payload["id"] = 1456
+            payload["review"] = "Love IT"
+            payload["purchase"] = False
+            # if "purchasecheck" in request.POST:
+            #     if request.POST["purchasecheck"] == 'on':
+            #         payload["purchase"] = True
+            # payload["purchase_date"] = request.POST["purchase_date"]
+            # payload["car_make"] = car.make.name
+            # payload["car_model"] = car.name
+            # payload["car_year"] = int(car.year.strftime("%Y"))
+            new_payload = {}
+            new_payload["review"] = payload
+            review_post_url = "https://us-south.functions.appdomain.cloud/api/v1/web/IBMCourseMFBJ_Final/default/post-review"
+            post_request(review_post_url, new_payload, id=id)
+        return redirect("djangoapp:dealer_details", id=id)
+
 

@@ -99,7 +99,7 @@ class DealerReview:
         self.id = ""
 
     def __str__(self):
-        return "Review: " + self.review
+        return "Review: " + self.review 
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__,

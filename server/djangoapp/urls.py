@@ -13,6 +13,7 @@ urlpatterns = [
 
     path(route='', view=views.get_dealerships, name='index'),
     path(route='dealer/<int:id>/', view=views.get_dealer_details, name='dealer_details'),
+    path(route='dealer/<int:id>/review', view=views.add_review, name='add_review'),
     path(route='contact', view=views.contact, name='contact'),
     path('registration/', views.registration_request, name='registration'),
     path('login/', views.login_request, name='login'),
