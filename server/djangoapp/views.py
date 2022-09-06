@@ -98,7 +98,7 @@ def get_dealer_details(request, id):
         context = {}
         dealer_url = "https://us-south.functions.appdomain.cloud/api/v1/web/IBMCourseMFBJ_Final/default/get-reviews"
         dealer = get_dealer_reviews_from_cf(dealer_url, id=id)
-        context["dealer"] = dealer
+        #context["dealer"] = dealer
     
         #review_url = "https://us-south.functions.appdomain.cloud/api/v1/web/IBMCourseMFBJ_Final/default/get-reviews"
         ##reviews = get_dealer_reviews_from_cf(review_url, id=id)
