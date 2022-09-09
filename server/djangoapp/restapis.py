@@ -64,8 +64,12 @@ def post_request(url, json_payload, **kwargs):
 # - Parse JSON results into a CarDealer object list
 def get_dealers_from_cf(url, **kwargs):
     results = []
+    state = kwargs.get("state")
+    if state:
+        json_result = get_request(url, state=state)
+    else:
+        json_result = get_request(url)
     # Call get_request with a URL parameter
-    json_result = get_request(url)
     if json_result:
         # Get the row list in JSON as dealers
         dealers = json_result
@@ -75,26 +79,50 @@ def get_dealers_from_cf(url, **kwargs):
             dealer_doc = dealer['doc']
             # Create a CarDealer object with values in `doc` object
             dealer_obj = CarDealer(address=dealer_doc["address"], city=dealer_doc["city"], full_name=dealer_doc["full_name"],
-                                   id=dealer_doc["id"], lat=dealer_doc["lat"], long=dealer_doc["long"],
-                                   short_name=dealer_doc["short_name"],
-                                   st=dealer_doc["st"], zip=dealer_doc["zip"])
+                                id=dealer_doc["id"], lat=dealer_doc["lat"], long=dealer_doc["long"],
+                                short_name=dealer_doc["short_name"],
+                                st=dealer_doc["st"], zip=dealer_doc["zip"])
             results.append(dealer_obj)
 
     return results
 
+def get_dealer_by_id_from_cf(url, id):
+    json_result = get_request(url, id=id)
+    
+    if json_result:
+        dealers = json_result[0]
+        dealer_doc = dealers
+        dealer_obj = CarDealer(address=dealer_doc["address"], city=dealer_doc["city"], full_name=dealer_doc["full_name"],
+                                id=dealer_doc["id"], lat=dealer_doc["lat"], long=dealer_doc["long"],
+                                short_name=dealer_doc["short_name"],
+                                st=dealer_doc["st"], zip=dealer_doc["zip"])
+    return dealer_obj
+
 # Create a get_dealer_reviews_from_cf method to get reviews by dealer id from a cloud function
-def get_dealer_reviews_from_cf(url, id):
+def get_dealer_reviews_from_cf(url, **kwargs):
     results = []
     # Call get_request with a URL parameter
-    json_result = get_request(url, id=id)
+    id = kwargs.get("id")
+    if id:
+        json_result = get_request(url, id=id)
+    else:
+        json_result = get_request(url)
+    
     if json_result:
-        # Get the row list in JSON as dealers
         reviews = json_result['data']
         # For each dealer object
         review_doc = reviews['docs']
         for i in range(len(review_doc)):
             review_obj = DealerReview(dealership=review_doc[i]["dealership"], name=review_doc[i]["name"], purchase=review_doc[i]["purchase"],
-                                   review=review_doc[i]["review"])
+                                review=review_doc[i]["review"])
+            if "purchase_date" in review_doc[i]:
+                review_obj.purchase_date = review_doc[i]["purchase_date"]
+            if "car_make" in review_doc[i]:
+                review_obj.car_make = review_doc[i]["car_make"]
+            if "car_model" in review_doc[i]:
+                review_obj.car_model = review_doc[i]["car_model"]
+            if "car_year" in review_doc[i]:
+                review_obj.car_year = review_doc[i]["car_year"]
             sentiment = analyze_review_sentiments(review_obj.review)
             print(sentiment)
             review_obj.sentiment = sentiment
