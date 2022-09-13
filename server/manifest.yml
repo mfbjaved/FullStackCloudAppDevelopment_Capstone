@@ -1,10 +1,10 @@
   applications:
-  - name: djangoapp
+  - name: mfbjcardjango
     routes:
       - route: mfbjcardjango.us-east.mybluemix.net
     memory: 128M
     buildpack: python_buildpack
-  - name: djangoapp-nginx
+  - name: mfbjcardjango-nginx
     routes:
       - route: mfbjcardjango.us-east.cf.appdomain.cloud/static
     memory: 128M
